@@ -5,6 +5,7 @@ import axios from "axios";
 function Home() {
   const [weatherData, setWeatherData] = useState(null);
   const [query, setQuery] = useState("Gorakhpur");
+  const [error, setError] = useState(null);
 
   const currentLocationWeather = async () => {
     try {
@@ -20,7 +21,9 @@ function Home() {
       setWeatherData(response.data);
       setQuery(response.data.name);
     } catch (error) {
-      console.error(error);
+      console.error("Error", error);
+      setError("Location not found. Please try again.");
+      setWeatherData(null);
     }
   };
 
@@ -35,11 +38,12 @@ function Home() {
           import.meta.env.VITE_API_KEY
         }`
       );
-      console.log(response.data);
       setWeatherData(response.data);
       localStorage.setItem("weatherData", JSON.stringify(response.data));
     } catch (error) {
-      console.log("Error", error);
+      console.error("Error", error);
+      setError("Location not found. Please try again.");
+      setWeatherData(null);
     }
   };
 
@@ -51,21 +55,21 @@ function Home() {
   }, [query]);
 
   return (
-    <div className="min-h-screen bg-gray-400 flex flex-col justify-center items-center">
-      <h1 className="w-full text-3xl text-red-800 text-center font-serif font-bold p-4 mb-2">
+    <div className="min-h-screen bg-sky-900 flex flex-col justify-center items-center">
+      <h1 className="w-full text-4xl text-teal-600 text-center font-serif font-bold p-4 mb-2">
         Weather App
       </h1>
       <div
         className="min-h-80 h-[540px] w-[480px] flex flex-col justify-center items-center gap-4 rounded-xl py-8 mb-8"
         style={{ backgroundImage: "linear-gradient(45deg, #2f4680, #500ae4)" }}
       >
-        <div className="flex justify-center items-center gap-4 py-2">
+        <div className="flex justify-center items-center gap-4 mt-2 py-2">
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Enter Location"
-            className="border-2 text-lg rounded-2xl py-1 px-1"
+            className="border-2 text-lg rounded-2xl py-1 px-2"
           />
           <div className="w-10 h-10 flex justify-center items-center bg-white rounded-full cursor-pointer">
             <img
@@ -93,31 +97,40 @@ function Home() {
             </svg>
           </div>
         </div>
-        <div>
-          <img
-            src={`http://openweathermap.org/img/wn/${weatherData?.weather[0]?.icon}@2x.png`}
-            alt={ weatherData?.weather[0]?.description }
-            className="h-40 w-40"
-          />
-          <p className="text-white text-3xl text-center font-bold">
-            {Math.floor(weatherData?.main?.temp)}°c
-          </p>
-          <p className="text-white text-3xl text-center font-bold">
-            {weatherData?.name}
-          </p>
-        </div>
-        <div className="w-full sm:w-4/6 flex justify-between items-center gap-4">
-          <div className="text-white flex flex-col items-start p-4">
-            <img src={images.humidity} className="h-10 w-10 mb-3" />
-            <p>{weatherData?.main?.humidity}%</p>
-            <p>Humidity</p>
+        {error && (
+          <div className="bg-red-600 text-white p-4 rounded-lg my-4">
+            {error}
           </div>
-          <div className="text-white flex flex-col items-end p-4">
-            <img src={images.wind} className="h-10 w-10 mb-3" />
-            <p>{weatherData?.wind?.speed}km/h</p>
-            <p>Wind</p>
-          </div>
-        </div>
+        )}
+        {weatherData && (
+          <>
+            <div>
+              <img
+                src={`http://openweathermap.org/img/wn/${weatherData?.weather[0]?.icon}@2x.png`}
+                alt={weatherData?.weather[0]?.description}
+                className="h-40 w-40 bg-white rounded-full"
+              />
+              <p className="text-white text-3xl text-center font-bold">
+                {Math.floor(weatherData?.main?.temp)}°c
+              </p>
+              <p className="text-white text-3xl text-center font-bold">
+                {weatherData?.name}
+              </p>
+            </div>
+            <div className="w-full sm:w-4/6 flex justify-between items-center gap-4">
+              <div className="text-white flex flex-col items-start p-4">
+                <img src={images.humidity} className="h-10 w-10 mb-3" />
+                <p>{weatherData?.main?.humidity}%</p>
+                <p>Humidity</p>
+              </div>
+              <div className="text-white flex flex-col items-end p-4">
+                <img src={images.wind} className="h-10 w-10 mb-3" />
+                <p>{weatherData?.wind?.speed}km/h</p>
+                <p>Wind</p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

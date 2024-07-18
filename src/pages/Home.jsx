@@ -55,13 +55,26 @@ function Home() {
   }, [query]);
 
   return (
-    <div className="min-h-screen bg-sky-900 flex flex-col justify-center items-center">
-      <h1 className="w-full text-4xl text-teal-600 text-center font-serif font-bold p-4 mb-2">
+    <div
+      className="min-h-screen bg-sky-900 flex flex-col justify-center items-center"
+      style={{
+        background: "#11567e",
+        background: "-webkit-radial-gradient(circle, #11567e 0%, #2b32b2 100%)",
+        background: "radial-gradient(circle, #11567e 0%, #2b32b2 100%)",
+      }}
+    >
+      <h1 className="w-full text-4xl text-white text-center font-serif font-bold p-4 mb-2">
         Weather App
       </h1>
       <div
-        className="min-h-80 h-[540px] w-[480px] flex flex-col justify-center items-center gap-4 rounded-xl py-8 mb-8"
-        style={{ backgroundImage: "linear-gradient(45deg, #2f4680, #500ae4)" }}
+        className="min-h-80 sm:h-[500px] sm:w-[480px] flex flex-col justify-center items-center gap-4 rounded-xl px-4 py-8 mb-8"
+        style={{
+          background: "rgba(13,25,89,0.5)",
+          background:
+            "-webkit-linear-gradient(0deg, #2b2f77 0%, #141852 50%, #070b34 100%)",
+          background:
+            "linear-gradient(0deg, #2b2f77 0%, #141852 50%, #070b34 100%)",
+        }}
       >
         <div className="flex justify-center items-center gap-4 mt-2 py-2">
           <input
@@ -69,23 +82,23 @@ function Home() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Enter Location"
-            className="border-2 text-lg rounded-2xl py-1 px-2"
+            className="border-2 text-sm sm:text-lg rounded-2xl py-1 px-2"
           />
-          <div className="w-10 h-10 flex justify-center items-center bg-white rounded-full cursor-pointer">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 flex justify-center items-center bg-white rounded-full cursor-pointer">
             <img
               src={images.search}
               onClick={() => fetchWeather(query)}
               alt="search"
-              className="w-5 h-5 rounded-full"
+              className="w-4 h-4 sm:w-5 sm:h-5 rounded-full"
             />
           </div>
           <div
-            className="w-10 h-10 flex justify-center items-center bg-white rounded-full cursor-pointer"
+            className="w-8 h-8 sm:w-10 sm:h-10 flex justify-center items-center bg-white rounded-full cursor-pointer"
             onClick={currentLocationWeather}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="w-4 h-4 sm:w-5 sm:h-5"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -104,11 +117,11 @@ function Home() {
         )}
         {weatherData && (
           <>
-            <div>
+            <div className="w-full flex flex-col justify-center items-center gap-1">
               <img
                 src={`http://openweathermap.org/img/wn/${weatherData?.weather[0]?.icon}@2x.png`}
                 alt={weatherData?.weather[0]?.description}
-                className="h-40 w-40 bg-white rounded-full"
+                className="sm:h-32 sm:w-32 bg-white rounded-full"
               />
               <p className="text-white text-3xl text-center font-bold">
                 {Math.floor(weatherData?.main?.temp)}°c
@@ -119,12 +132,12 @@ function Home() {
             </div>
             <div className="w-full sm:w-4/6 flex justify-between items-center gap-4">
               <div className="text-white flex flex-col items-start p-4">
-                <img src={images.humidity} className="h-10 w-10 mb-3" />
+                <img src={images.humidity} className="h-8 w-8 mb-3" />
                 <p>{weatherData?.main?.humidity}%</p>
                 <p>Humidity</p>
               </div>
               <div className="text-white flex flex-col items-end p-4">
-                <img src={images.wind} className="h-10 w-10 mb-3" />
+                <img src={images.wind} className="h-8 w-8 mb-3" />
                 <p>{weatherData?.wind?.speed}km/h</p>
                 <p>Wind</p>
               </div>
